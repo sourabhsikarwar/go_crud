@@ -16,6 +16,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("<h1>Welcome to my courses API</h1>"))
 }
 
+// Get all courses
 func getAllCourses(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get all courses")
 	w.Header().Set("Content-Type", "application/json")
@@ -23,6 +24,7 @@ func getAllCourses(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(MyCourses)
 }
 
+// Get course
 func getCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get course")
 	w.Header().Set("Content-Type", "application/json")
@@ -39,6 +41,7 @@ func getCourse(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Create course
 func createCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Create a course")
 	w.Header().Set("Content-Type", "application/json")
@@ -64,6 +67,7 @@ func createCourse(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Update course
 func updateCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Update a course")
 	w.Header().Set("Content-Type", "application/json")
@@ -91,6 +95,7 @@ func updateCourse(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Delete course
 func deleteCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Delete a course")
 	w.Header().Set("Content-Type", "application/json")
