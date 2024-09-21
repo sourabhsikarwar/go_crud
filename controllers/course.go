@@ -9,29 +9,30 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	mydatabase "github.com/sourabhsikarwar/go_crud/db"
 	"github.com/sourabhsikarwar/go_crud/models"
 )
 
-func serveHome(w http.ResponseWriter, r *http.Request) {
+func ServeHome(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("<h1>Welcome to my courses API</h1>"))
 }
 
 // Get all courses
-func getAllCourses(w http.ResponseWriter, r *http.Request) {
+func GetAllCourses(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get all courses")
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(MyCourses)
+	json.NewEncoder(w).Encode(mydatabase.MyCourses)
 }
 
 // Get course
-func getCourse(w http.ResponseWriter, r *http.Request) {
+func GetCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get course")
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
 
-	for _, course := range MyCourses {
+	for _, course := range mydatabase.MyCourses {
 		if course.CourseID == params["id"] {
 			json.NewEncoder(w).Encode(course)
 			return
@@ -42,7 +43,7 @@ func getCourse(w http.ResponseWriter, r *http.Request) {
 }
 
 // Create course
-func createCourse(w http.ResponseWriter, r *http.Request) {
+func CreateCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Create a course")
 	w.Header().Set("Content-Type", "application/json")
 
@@ -62,21 +63,21 @@ func createCourse(w http.ResponseWriter, r *http.Request) {
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 	course.CourseID = strconv.Itoa(rand.Intn(100))
 
-	MyCourses = append(MyCourses, course)
+	mydatabase.MyCourses = append(mydatabase.MyCourses, course)
 	json.NewEncoder(w).Encode(course)
 	return
 }
 
 // Update course
-func updateCourse(w http.ResponseWriter, r *http.Request) {
+func UpdateCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Update a course")
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
 
-	for i, course := range MyCourses {
+	for i, course := range mydatabase.MyCourses {
 		if course.CourseID == params["id"] {
-			MyCourses = append(MyCourses[:i], MyCourses[i+1:]...)
+			mydatabase.MyCourses = append(mydatabase.MyCourses[:i], mydatabase.MyCourses[i+1:]...)
 
 			var course models.Course
 			_ = json.NewDecoder(r.Body).Decode(&course)
@@ -86,7 +87,7 @@ func updateCourse(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			course.CourseID = params["id"]
-			MyCourses = append(MyCourses, course)
+			mydatabase.MyCourses = append(mydatabase.MyCourses, course)
 			json.NewEncoder(w).Encode(course)
 			return
 		}
@@ -96,15 +97,15 @@ func updateCourse(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete course
-func deleteCourse(w http.ResponseWriter, r *http.Request) {
+func DeleteCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Delete a course")
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
 
-	for i, course := range MyCourses {
+	for i, course := range mydatabase.MyCourses {
 		if course.CourseID == params["id"] {
-			MyCourses = append(MyCourses[:i], MyCourses[i+1:]...)
+			mydatabase.MyCourses = append(mydatabase.MyCourses[:i], mydatabase.MyCourses[i+1:]...)
 			json.NewEncoder(w).Encode("Course deleted successfully")
 			return
 		}
